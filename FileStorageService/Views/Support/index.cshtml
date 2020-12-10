@@ -1,0 +1,149 @@
+﻿@{
+    ViewData["Title"] = "Support";
+}
+
+
+<div class="support">
+
+    <div class="test">
+        <div class="block">
+            <form asp-action="GetFiles" method="get">
+                <fieldset>
+                    <label>Search for Files by UserId:</label>
+                    <input type="text" name="UserId" class="form-control" placeholder="UserId" />
+                    <button type="submit">Get Files by userId</button>
+                </fieldset>
+            </form>
+            <form asp-action="DownloadFile" method="get">
+                <fieldset>
+                    <label>Download file by fileId:</label>
+                    <input type="text" name="fileId" class="form-control" placeholder="File Id" />
+                    <button type="submit">Download File</button>
+                </fieldset>
+            </form>
+            <form asp-action="DeleteFile" method="get">
+                <fieldset>
+                    <label>Delete File by fileId:</label>
+                    <input type="text" name="fileId" class="form-control" placeholder="File Id" />
+                    @*<input type="text" name="userId" class="form-control" placeholder="UserId" />*@
+                    <button type="submit">Delete File</button>
+                </fieldset>
+            </form>
+
+            <form asp-action="UploadFile" method="post" enctype="multipart/form-data">
+                <fieldset>
+                    <label>Upload File(s):</label>
+                    <br>
+                    <div class="fileUpload">
+                        <input type="text" name="UserId" class="form-control" placeholder="UserId" />
+                        @*<select class="form-control" name="accessLevel">
+                        <option value="0">Private</option>
+                        <option value="1">Container</option>
+                        <option value="2">Blob</option>
+                    </select>*@
+                        <select class="form-control" name="ContainerName">
+                            <option value="Avdeling1">Avdeling1</option>
+                            <option value="Avdeling2">Avdeling2</option>
+                            <option value="Avdeling3">Avdeling3</option>
+                        </select>
+                        <input type="file" id="file" name="selectFiles" class="upload" onchange="DisplayFilesToUpload()" multiple />
+                    </div>
+
+                    <p id="FilesToUpload"></p>
+                </fieldset>
+            </form>
+            <form asp-action="GetSasUri" method="get">
+                <fieldset>
+                    <label>Get Shared Access Key:</label>
+                    <input type="text" name="fileId" class="form-control" placeholder="FileId" />
+                    <button type="submit">Get Shared Access Uri</button>
+                </fieldset>
+            </form>
+
+        </div>
+    </div>
+    <div class="result">
+        <h5>Result:</h5>
+        <div class="resultContent">
+            <pre>
+            <code id="result">@ViewBag.Result</code></pre>
+        </div>
+    </div>
+</div>
+<script>function DisplayFilesToUpload() {
+        var element = document.getElementById("file");
+        var html = "";
+        console.log("added file");
+        html = "<h4>Image(s) to Upload:</h4>"
+        for (var i = 0; i < element.files.length; i++) {
+            html += "<strong>" + (i + 1) + "</strong>. File: ";
+            var file = element.files[i];
+            if ('name' in file) {html += file.name + " (";}
+            if ('size' in file) {html += "size: " + file.size + " bytes)<br>";}
+        }
+
+        html += "<input type='submit' class='upload' value='Upload'/></div>"
+        document.getElementById("FilesToUpload").innerHTML = html;
+    }</script>
+
+<style>
+
+    .support {
+        font-size: 12px;
+        display: flex;
+    }
+
+    .test {
+        width: 500px;
+        border-right: 1px solid #ccc;
+        padding-right: 20px;
+        overflow: auto;
+        position: relative;
+        height: 1020px;
+    }
+
+    .result {
+        flex: 1;
+        padding: 0 20px;
+        overflow: auto;
+        position: relative;
+        border: 1px solid #ccc;
+        background: #f2f2f2;
+    }
+
+    .block {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 5px;
+    }
+
+    pre {
+        overflow: inherit;
+    }
+
+    h5 {
+        margin: 0;
+    }
+
+    form {
+        border-bottom: 1px solid #ccc;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+    }
+
+    .resultContent {
+        font-size: 12px;
+        height: 1020px;
+        flex: 1;
+        position: relative;
+    }
+
+
+    .required {
+        color: darkred;
+    }
+</style>
+
